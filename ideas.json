@@ -1,0 +1,169 @@
+{
+  "projects": [
+    {
+      "title": "Simple Algorithm Visualizer",
+      "description": "Create a command-line tool that takes an array and prints each step of a chosen sorting algorithm (e.g., bubble sort). It should output the array after each swap. The project can expand by adding more algorithms or visualization styles (like ASCII bars)."
+    },
+    {
+      "title": "Text-Based To-Do List",
+      "description": "Build a script that lets users add, remove, and list tasks using a simple text input interface. Data can be saved locally in a plain text or JSON file. Extend it by adding task prioritization, deadlines, or search functionality."
+    },
+    {
+      "title": "Random Password Generator",
+      "description": "Implement a tool that generates strong passwords with configurable length and character types (letters, numbers, symbols). It can be enhanced by adding password strength estimation or history management."
+    },
+    {
+      "title": "Command-Line Quiz",
+      "description": "Develop a console-based quiz program that reads questions and answers from a JSON file and quizzes the user interactively. You can extend it by adding timed questions, scoring, or different question types."
+    },
+    {
+      "title": "Daily Journal Logger",
+      "description": "Create a simple script to log daily journal entries with timestamps into a local text or JSON file. It can be improved by adding search, export, or sentiment analysis on entries."
+    },
+    {
+      "title": "Basic Encryption Tool",
+      "description": "Make a command-line tool that encrypts and decrypts text using a simple algorithm like Caesar cipher or XOR. The project can evolve to support multiple ciphers or file encryption."
+    },
+    {
+      "title": "Number Guessing Game",
+      "description": "Write a console program where the user guesses a randomly selected number within a range. Provide feedback on each guess. It’s extendable by adding difficulty levels, score tracking, or multiplayer mode."
+    },
+    {
+      "title": "File Organizer",
+      "description": "Develop a script that sorts files in a given directory into folders based on file extension. This can be extended by adding options for custom rules or dry-run mode."
+    },
+    {
+      "title": "Command-Line Countdown Timer",
+      "description": "Create a timer that counts down from a user-specified time and prints updates to the console. Improvements might include multiple timers, alarms, or pause/resume capabilities."
+    },
+    {
+      "title": "Random Exercise Generator",
+      "description": "Write a program that suggests a daily set of exercises chosen at random or based on user preferences. Add-ons could include exercise history, intensity tracking, or equipment filters."
+    },  
+    {
+      "title": "Personal Cookbook Manager",
+      "description": "Make a tool for storing, listing, and retrieving recipes from text or JSON files. Possible upgrades: search by ingredients, meal planner, or shopping list generator."
+    },
+    {
+      "title": "Personal Vocabulary Builder",
+      "description": "Create a tool for users to add new words, their meanings, and example sentences. Expand with spaced repetition for review, quiz features, or progress tracking."
+    },
+    {
+      "title": "Simple Time Tracker",
+      "description": "Develop a command-line time tracking utility to log time spent on tasks or projects. Extend features with reports, daily/weekly summaries, or automated idle detection."
+    },
+    {
+      "title": "Offline Book Catalogue",
+      "description": "Build a script for cataloguing owned books with fields for title, author, genre, and notes. Expand with loan tracking, wishlist management, or reading statistics."
+    },
+    {
+      "title": "Simple Music Playlist Manager",
+      "description": "Implement a playlist organizer for local audio files, storing track info and playback order. Future enhancements could include play statistics, ratings, or exporting playlists."
+    },
+    {
+      "title": "Text-Based Recipe Scaler",
+      "description": "Make a program to adjust ingredient quantities for recipes based on servings. Improvements can include shopping list generation, unit conversions, or substitution suggestions."
+    },
+    {
+      "title": "Personal Memory Journal",
+      "description": "Create a script to record short daily memories or highlights. Enhance by tagging, year-in-review summaries, or random memory retrieval."
+    },
+    {
+      "title": "Quote Manager",
+      "description": "Develop a tool to store, tag, and retrieve favorite quotes. Room for improvements with random quote of the day, author/category filters, or sharing/exporting options."
+    },
+    {
+      "title": "Binary Converter Tool",
+      "description": "Write a command-line utility for converting numbers between binary, decimal, and hexadecimal. Expand by adding support for floating-point, custom bases, or conversion history."
+    },
+    {
+      "title": "Offline Expense Splitter",
+      "description": "Build a quick script to split bills among friends or roommates. Add features like adjustable splits, group management, or debt tracking over time."
+    },
+    {
+      "title": "Random Name Picker",
+      "description": "Implement a random selector for names or options from a list, useful for group activities. Extensions: weighted choices, exclusion lists, or result history."
+    },
+    {
+      "title": "Offline Train Timetable Optimizer",
+      "description": "Design a script that takes a set of train schedules and determines the most efficient way to connect between given stations. This can be enhanced later by adding support for variable transfers, delays, or user-defined optimization goals."
+    },
+    {
+      "title": "Train Wagon Shuffler Simulator",
+      "description": "Simulate the re-ordering of train wagons in a virtual rail yard to achieve a target order using limited moves. Expansion ideas include different yard layouts, movement constraints, or an automated solver that finds optimal steps."
+    },
+    {
+      "title": "Enigma Machine Emulator",
+      "description": "Implement a command-line version of the WW2 Enigma cipher machine. The basic model can be expanded with custom rotors, plugboard configurations, and support for decrypting saved messages."
+    },
+    {
+      "title": "Offline Book Suggestion Engine",
+      "description": "A tool that recommends a random book from a customizable local list based on genres or tags. Future versions could feature review logs, reading frequency analysis, or advanced filtering."
+    },
+    {
+      "title": "Simple Command-Line Calendar",
+      "description": "Create a program for viewing and adding events to a local calendar. Extendable by supporting recurring events, reminders, import/export, or statistics."
+    },
+    {
+      "title": "Virtual Pet (No UI)",
+      "description": "Manage stats for a text-based virtual pet (hunger, happiness, health). Extend by saving progress, adding events (random or scheduled), or multiple pet interactions."
+    },
+    {
+      "title": "Local Movie Rating Tracker",
+      "description": "Log movies watched and assign ratings, with reports on favorites or directors. Expand to suggestions, graphing trends, or exporting stats."
+    },
+    {
+      "title": "Offline Board Game Scorekeeper",
+      "description": "Keep track of points or progress in any board/card game. Expand by including game setup snapshots, history, or support for custom rules."
+    },
+    {
+      "title": "Command-Line Text Compressor",
+      "description": "Implement a simple file/text compression tool (e.g., Run Length Encoding, Huffman coding). Expand support for various algorithms, compression logs, or file batch processing."
+    },
+    {
+      "title": "Offline Dream Journal",
+      "description": "A journaling tool designed for quick morning entries about dreams with timestamps, themes, and optional tags. Add dream statistics, similar-dream retrieval, or search features."
+    },
+    {
+      "title": "Simple Local Weather Logger",
+      "description": "Create a tool where users input daily weather observations (temperature, clouds, etc.) to track local trends. Expand by adding graphs, averages, or seasonal comparisons."
+    },
+    {
+      "title": "Command-Line Morse Code Translator",
+      "description": "Develop a text-to-Morse code and Morse-to-text converter. Expand by including audio playback of Morse code, encoding/decoding files, or speed adjustment."
+    },
+    {
+      "title": "Personal Project Progress Tracker",
+      "description": "Make a tool to list personal projects and mark milestones or stages of completion. Add features for goals, priority sorting, or timeline/calendaring."
+    },
+    {
+      "title": "ASCII Art Generator",
+      "description": "Build a program that converts text or simple geometric shapes into ASCII art. Improvements can include preset templates, character set selection, or output formatting."
+    },
+    {
+      "title": "Simple Workout Log",
+      "description": "Implement an exercise log for tracking workouts (reps, sets, type, intensity). Enhance with progress summaries, PR (personal record) management, or training plans."
+    },
+    {
+      "title": "Simple Flashcard Quizzer",
+      "description": "Create a flashcard system in the terminal that allows users to add, review, and quiz themselves on custom topics. Enhance it with spaced repetition, import/export, or performance tracking."
+    },
+    {
+      "title": "Sudoku Solver and Generator",
+      "description": "Create a program that can solve a given Sudoku puzzle using backtracking or another algorithm, and also generate valid Sudoku puzzles of varying difficulty. It can be extended by adding puzzle validation, hint generation, or different puzzle sizes."
+    },
+    {
+      "title": "Train Schedule Manager",
+      "description": "Build a command-line tool to input, store, and query train schedules, including arrival and departure times. The program can support adding delays or cancellations and can be improved with route optimization or conflict detection."
+    },
+    {
+      "title": "Habit Tracker",
+      "description": "Develop a simple script to log daily habits with completion status and streak tracking. It can save data locally and support reminders, progress summaries, or habit ranking for motivation."
+    },
+    {
+      "title": "Checklist Manager",
+      "description": "Implement a flexible checklist system where users can create multiple checklists, add/remove tasks, and mark tasks as done. Extensions could include prioritization, due dates, or task grouping."
+    }
+  ]
+}
+
