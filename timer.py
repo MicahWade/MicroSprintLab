@@ -27,7 +27,7 @@ def timer(second: int) -> int:
     print(remainingTime)
     while remainingTime > 0:
         if checkForInput(thread) == 0:
-            return 0
+            return int(remainingTime)
         if reminders[0] > remainingTime:
             reminder(reminders[0])
         print("Remaining time: {:.1f}s".format(remainingTime), end="\r", flush=True)

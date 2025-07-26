@@ -4,6 +4,7 @@ from timedInput import Tinput
 import os
 import newTerminal
 import timer
+import gitManager
 
 projectPath = os.path.expanduser("~/Documents/MicroSprintLab/Projects")
 if not os.path.exists(projectPath):
@@ -75,7 +76,8 @@ def setupProject(projectTitle: str):
         os.makedirs(currentProjectPath)
     makeFile(currentProjectPath, f"main{language}")
     newTerminal.openOtherTerminal(f"{editor} {currentProjectPath}/main{language}")
-    timer.timer(3600)
+    timeSpent = int(3600 - timer.timer(3600))
+    gitManager.finishProject(projectTitle, currentProjectPath, projectPath, timeSpent)
 
 
 def main():
