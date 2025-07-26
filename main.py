@@ -2,6 +2,8 @@ import json
 import random
 from timedInput import Tinput
 import os
+import newTerminal
+import timer
 
 projectPath = os.path.expanduser("~/Documents/MicroSprintLab/Projects")
 if not os.path.exists(projectPath):
@@ -28,7 +30,7 @@ Thinking & Research Time Is Over
 
 Your 5-minute period for thinking and research has ended.
 
-Now it’s time to start coding! You have 1 hour to implement your ida.
+Now it’s time to start coding! You have 1 hour to implement the idea.
 
 Good luck—let’s see what you can create!
 """
@@ -72,7 +74,8 @@ def setupProject(projectTitle: str):
     if not os.path.exists(currentProjectPath):
         os.makedirs(currentProjectPath)
     makeFile(currentProjectPath, f"main{language}")
-    os.system(f"{editor} {currentProjectPath}/main{language}")
+    newTerminal.openOtherTerminal(f"{editor} {currentProjectPath}/main{language}")
+    timer.timer(3600)
 
 
 def main():
