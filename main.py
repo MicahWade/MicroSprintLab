@@ -1,7 +1,15 @@
 import json
 import random
 from timedInput import Tinput
+import os
 
+projectPath = os.path.expanduser("~/Documents/MicroSprintLab/Projects")
+if not os.path.exists(projectPath):
+    os.makedirs(projectPath)
+
+oneHourPath = os.path.join(projectPath, "OneHour")
+
+currentProjectPath = oneHourPath
 welcomeMessage = """
 Welcome to MicroSprintLab!
 
@@ -38,14 +46,43 @@ def getRandomIdea():
     return random.choice(data)
 
 
+def createOneHourProjectPath():
+    if not os.path.exists(oneHourPath):
+        os.makedirs(oneHourPath)
+
+
+def makeFile(directory, name, startingInfo=None):
+    with open(os.path.join(directory, name), "w") as fp:
+        if startingInfo is None:
+            pass
+        else:
+            fp.write(startingInfo)
+
+
+def setupProject(projectTitle: str):
+    with open("settings.json", "r") as file:
+        data = json.load(file)
+        editor = data["editor"]
+        language = data["language"]
+    global currentProjectPath
+    if currentProjectPath is oneHourPath:
+        currentProjectPath = os.path.join(
+            currentProjectPath, projectTitle.replace(" ", "")
+        )
+    if not os.path.exists(currentProjectPath):
+        os.makedirs(currentProjectPath)
+    makeFile(currentProjectPath, f"main{language}")
+    os.system(f"{editor} {currentProjectPath}/main{language}")
+
+
 def main():
     print(welcomeMessage)
     input()
     idea = getRandomIdea()
+    createOneHourProjectPath()
     print(ideaMessage % (idea["title"], idea["description"]))
-    print(idea["title"])
-    print(idea["description"])
     Tinput(300, outOfTimeMessage)
+    setupProject(idea["title"])
 
 
 if __name__ == "__main__":
