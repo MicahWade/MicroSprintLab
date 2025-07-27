@@ -62,7 +62,7 @@ def makeFile(directory, name, startingInfo=None):
             fp.write(startingInfo)
 
 
-def setupProject(projectTitle: str):
+def setupProject(projectTitle: str, projectDescription: str):
     with open("settings.json", "r") as file:
         data = json.load(file)
         editor = data["editor"]
@@ -77,7 +77,9 @@ def setupProject(projectTitle: str):
     makeFile(currentProjectPath, f"main{language}")
     newTerminal.openOtherTerminal(f"{editor} {currentProjectPath}/main{language}")
     timeSpent = int(3600 - timer.timer(3600))
-    gitManager.finishProject(projectTitle, currentProjectPath, projectPath, timeSpent)
+    gitManager.finishProject(
+        projectTitle, projectDescription, currentProjectPath, projectPath, timeSpent
+    )
 
 
 def main():
@@ -87,7 +89,7 @@ def main():
     createOneHourProjectPath()
     print(ideaMessage % (idea["title"], idea["description"]))
     Tinput(300, outOfTimeMessage)
-    setupProject(idea["title"])
+    setupProject(idea["title"], idea["description"])
 
 
 if __name__ == "__main__":
