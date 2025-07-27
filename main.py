@@ -10,6 +10,14 @@ projectPath = os.path.expanduser("~/Documents/MicroSprintLab/Projects")
 if not os.path.exists(projectPath):
     os.makedirs(projectPath)
 
+with open("settings.json", "r") as file:
+    data = json.load(file)
+    editor = data["editor"]
+    language = data["language"]
+    remote = data["remote"]
+    nvim = data["nvim"]
+if nvim:
+    import nvimManager
 oneHourPath = os.path.join(projectPath, "OneHour")
 
 currentProjectPath = oneHourPath
@@ -63,11 +71,6 @@ def makeFile(directory, name, startingInfo=None):
 
 
 def setupProject(projectTitle: str, projectDescription: str):
-    with open("settings.json", "r") as file:
-        data = json.load(file)
-        editor = data["editor"]
-        language = data["language"]
-        remote = data["remote"]
     global currentProjectPath
     if currentProjectPath is oneHourPath:
         currentProjectPath = os.path.join(
@@ -75,6 +78,7 @@ def setupProject(projectTitle: str, projectDescription: str):
         )
     if not os.path.exists(currentProjectPath):
         os.makedirs(currentProjectPath)
+
     makeFile(currentProjectPath, f"main{language}")
     newTerminal.openOtherTerminal(f"{editor} {currentProjectPath}/main{language}")
     timeSpent = int(3600 - timer.timer(3600))
@@ -88,9 +92,17 @@ def setupProject(projectTitle: str, projectDescription: str):
     )
 
 
+def displayText(text: str):
+    global nvimManager
+    if nvim and nvimManager:
+        nvimManager.displayTextWait(text)
+    else:
+        print(text)
+        input()
+
+
 def main():
-    print(welcomeMessage)
-    input()
+    displayText(welcomeMessage)
     idea = getRandomIdea()
     createOneHourProjectPath()
     print(ideaMessage % (idea["title"], idea["description"]))
