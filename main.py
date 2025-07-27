@@ -67,6 +67,7 @@ def setupProject(projectTitle: str, projectDescription: str):
         data = json.load(file)
         editor = data["editor"]
         language = data["language"]
+        remote = data["remote"]
     global currentProjectPath
     if currentProjectPath is oneHourPath:
         currentProjectPath = os.path.join(
@@ -78,7 +79,12 @@ def setupProject(projectTitle: str, projectDescription: str):
     newTerminal.openOtherTerminal(f"{editor} {currentProjectPath}/main{language}")
     timeSpent = int(3600 - timer.timer(3600))
     gitManager.finishProject(
-        projectTitle, projectDescription, currentProjectPath, projectPath, timeSpent
+        projectTitle,
+        projectDescription,
+        currentProjectPath,
+        projectPath,
+        timeSpent,
+        remote,
     )
 
 

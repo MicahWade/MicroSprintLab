@@ -1,4 +1,5 @@
 {
   "editor": "nvim",
-  "language": ".py"
+  "language": ".py",
+  "remote": true
 }
