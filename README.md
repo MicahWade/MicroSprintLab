@@ -9,3 +9,8 @@ MicroSprintLab
 
 mvim start
 nvim --listen /tmp/nvim
+
+cp lua file form to ~/.config/nvim/lua/microsprintlab.lua
+
+add to inti.lua
+require("microsprintlab").setup()
