@@ -23,12 +23,15 @@ source venv/bin/activate
 
 ```bash
 pip install -r requirements.txt
+```
+To Start Run
+```bash
 python3 main.py
 ```
 
-### Neovim Integration  
+### For Neovim Integration  
+Start with Command line Version
 ```bash
-git clone https://github.com/MicahWade/MicroSprintLab.git ~/Documents/
 cp ~/Documents/MicroSprintLab/microsprintlab.lua ~/.config/nvim/lua/microsprintlab.lua
 # Add to init.lua:
 require("microsprintlab").setup()
