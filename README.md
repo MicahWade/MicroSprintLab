@@ -1,7 +1,4 @@
 # MicroSprintLab  
-*Learn programming skills with focused 1-hour projects*
-
-## Description  
 **MicroSprintLab** is a learning tool designed to help coders sharpen their programming skills through short, engaging 1-hour projects. It is especially suited for those learning new programming languages or programming fundamentals.
 
 ## Intended Audience  
