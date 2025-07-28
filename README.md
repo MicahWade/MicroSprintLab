@@ -1,5 +1,3 @@
-Here is a draft README for MicroSprintLab based on the details you provided and following the useful README structure from the video:
-
 # MicroSprintLab  
 *Learn programming skills with focused 1-hour projects*
 
