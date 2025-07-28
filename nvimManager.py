@@ -131,6 +131,38 @@ def OpenFileInSingleTab(filePath):
     nvim.api.win_set_option(curWin, "signcolumn", "yes")
 
 
+def WaitForUserDoneInputAndEnter():
+    nvim = pynvim.attach("socket", path="/tmp/nvim")
+
+    # Shared variable/state in Neovim to detect Enter pressed after leaving Insert mode
+    nvim.exec_lua("""
+        vim.g.user_done_enter = false
+        vim.api.nvim_create_autocmd("InsertLeave", {
+            callback = function()
+                vim.g.user_done_enter = false
+            end
+        })
+        vim.api.nvim_buf_set_keymap(0, "n", "<CR>", "", {
+            noremap = True,
+            silent = True,
+            callback = function()
+                vim.g.user_done_enter = true
+            end
+        })
+    """)
+
+    # Wait loop until user leaves Insert and presses Enter
+    while True:
+        done = nvim.eval("vim.g.user_done_enter")
+        if done:
+            break
+        time.sleep(0.1)
+
+    buf = nvim.current.buffer
+    lines = buf[:]
+    return lines
+
+
 def CloseNvim():
     nvim = pynvim.attach("socket", path="/tmp/nvim")
     currentTab = nvim.api.get_current_tabpage()

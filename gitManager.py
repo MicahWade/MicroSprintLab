@@ -1,5 +1,6 @@
 import git
 import os
+from displayText import inputDisplay
 
 readme = """
 # %s
@@ -33,10 +34,8 @@ def FinishProject(
     title: str, description: str, path, projectPath, time: int, remote: bool
 ):
     mainRepo = FirstSetup(projectPath)
-    print("Please add Install Instruction")
-    instruction = input().strip() or " "
-    print("Please add Reflections")
-    reflection = input().strip() or " "
+    instruction = inputDisplay("Please add Install Instruction").strip() or " "
+    reflection = inputDisplay("Please add Reflections").strip() or " "
     with open(os.path.join(path, "readme.md"), "w") as file:
         file.write(readme % (title, description, time, instruction, reflection))
     with open(os.path.join(projectPath, "readme.md"), "a") as file:

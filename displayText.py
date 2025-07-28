@@ -19,6 +19,16 @@ def DisplayText(text: str):
         input()
 
 
+def inputDisplay(text: str) -> str:
+    global nvimManager
+    if nvimManager and nvim:
+        nvimManager.DisplayTextWait(text)
+        return "\n".join(nvimManager.WaitForUserDoneInputAndEnter())
+    else:
+        print(text)
+        return input()
+
+
 def TimedDisplayText(text: str, time: int):
     global nvimManager
     global Tinput
