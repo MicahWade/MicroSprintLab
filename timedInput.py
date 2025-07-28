@@ -2,12 +2,12 @@ import threading
 
 
 def Tinput(time: int):
-    def getInput():
+    def GetInput():
         answer = str(input())
 
-    thread = threading.Thread(target=getInput)
-    thread.daemon = True
-    thread.start()
-    thread.join(time)
-    if thread.is_alive():
+    inputThread = threading.Thread(target=GetInput)
+    inputThread.daemon = True
+    inputThread.start()
+    inputThread.join(time)
+    if inputThread.is_alive():
         return 0

@@ -3,7 +3,7 @@ import shutil
 import subprocess
 
 
-def getTerminal():
+def GetTerminal():
     if sys.platform.startswith("win"):
         if shutil.which("powershell"):
             return "powershell"
@@ -28,14 +28,13 @@ def getTerminal():
         ]:
             if shutil.which(cmd):
                 return cmd
-        # if can't find editor Throw Error
         raise OSError("Could Not Find your Linux Terminal")
     else:
-        raise OSError("Unknowen OS Please File a Bug Report")
+        raise OSError("Unknown OS Please File a Bug Report")
 
 
-def openOtherTerminal(command: str):
-    terminal = getTerminal()
+def OpenOtherTerminal(command: str):
+    terminal = GetTerminal()
 
     if sys.platform.startswith("win"):
         subprocess.Popen([terminal, "/K", command])

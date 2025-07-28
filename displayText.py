@@ -1,7 +1,5 @@
 import json
 
-from gitdb.db.pack import glob
-
 with open("settings.json", "r") as file:
     data = json.load(file)
     nvim = data["nvim"]
@@ -12,20 +10,20 @@ else:
     from timedInput import Tinput
 
 
-def displayText(text: str):
+def DisplayText(text: str):
     global nvimManager
     if nvim and nvimManager:
-        nvimManager.displayTextWait(text)
+        nvimManager.DisplayTextWait(text)
     else:
         print(text)
         input()
 
 
-def timedDisplayText(text: str, time: int):
+def TimedDisplayText(text: str, time: int):
     global nvimManager
     global Tinput
     if nvim and nvimManager:
-        nvimManager.fullscreenCountdownWithText(text, time)
+        nvimManager.FullscreenCountdownWithText(text, time)
     else:
         print(text)
         Tinput(time)

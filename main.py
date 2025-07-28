@@ -4,7 +4,7 @@ import os
 import newTerminal
 import timer
 import gitManager
-from displayText import displayText, timedDisplayText
+from displayText import DisplayText, TimedDisplayText
 
 projectPath = os.path.expanduser("~/Documents/MicroSprintLab/Projects")
 if not os.path.exists(projectPath):
@@ -16,9 +16,10 @@ with open("settings.json", "r") as file:
     language = data["language"]
     remote = data["remote"]
     nvim = data["nvim"]
-oneHourPath = os.path.join(projectPath, "OneHour")
 
+oneHourPath = os.path.join(projectPath, "OneHour")
 currentProjectPath = oneHourPath
+
 welcomeMessage = """
 Welcome to MicroSprintLab!
 
@@ -49,26 +50,24 @@ ideaMessage = """
 You have 5 minutes to Think and Research if you are done early Press ENTER"""
 
 
-def getRandomIdea():
+def GetRandomIdea():
     with open("ideas.json", "r") as file:
         data = json.load(file)["projects"]
     return random.choice(data)
 
 
-def createOneHourProjectPath():
+def CreateOneHourProjectPath():
     if not os.path.exists(oneHourPath):
         os.makedirs(oneHourPath)
 
 
-def makeFile(directory, name, startingInfo=None):
+def MakeFile(directory, name, startingInfo=None):
     with open(os.path.join(directory, name), "w") as fp:
-        if startingInfo is None:
-            pass
-        else:
+        if startingInfo is not None:
             fp.write(startingInfo)
 
 
-def setupProject(projectTitle: str, projectDescription: str):
+def SetupProject(projectTitle: str, projectDescription: str):
     global currentProjectPath
     if currentProjectPath is oneHourPath:
         currentProjectPath = os.path.join(
@@ -77,17 +76,19 @@ def setupProject(projectTitle: str, projectDescription: str):
     if not os.path.exists(currentProjectPath):
         os.makedirs(currentProjectPath)
 
-    makeFile(currentProjectPath, f"main{language}")
+    MakeFile(currentProjectPath, f"main{language}")
     if not nvim:
-        newTerminal.openOtherTerminal(f"{editor} {currentProjectPath}/main{language}")
-        timeSpent = int(3600 - timer.timer(3600))
+        newTerminal.OpenOtherTerminal(f"{editor} {currentProjectPath}/main{language}")
+        timeSpent = int(3600 - timer.Timer(3600))
     else:
         import nvimManager
 
-        nvimManager.setup_idea_command(projectTitle, projectDescription)
-        nvimManager.openFileInSingleTab(f"{currentProjectPath}/main{language}")
-        timeSpent = int(3600 - nvimManager.timer_with_reminders_and_popup(3600))
-    gitManager.finishProject(
+        nvimManager.SetupIdeaCommand(projectTitle, projectDescription)
+        nvimManager.OpenFileInSingleTab(f"{currentProjectPath}/main{language}")
+        timeSpent = int(3600 - nvimManager.TimerWithRemindersAndPopup(3600))
+        nvimManager.CloseNvim()
+
+    gitManager.FinishProject(
         projectTitle,
         projectDescription,
         currentProjectPath,
@@ -97,13 +98,13 @@ def setupProject(projectTitle: str, projectDescription: str):
     )
 
 
-def main():
-    displayText(welcomeMessage)
-    idea = getRandomIdea()
-    createOneHourProjectPath()
-    timedDisplayText(ideaMessage % (idea["title"], idea["description"]), 300)
-    setupProject(idea["title"], idea["description"])
+def Main():
+    DisplayText(welcomeMessage)
+    idea = GetRandomIdea()
+    CreateOneHourProjectPath()
+    TimedDisplayText(ideaMessage % (idea["title"], idea["description"]), 300)
+    SetupProject(idea["title"], idea["description"])
 
 
 if __name__ == "__main__":
-    main()
+    Main()

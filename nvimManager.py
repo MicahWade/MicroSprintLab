@@ -1,23 +1,22 @@
 import time
 import pynvim
 import os
-import threading
 
 
-def drawFloatingWindowWithTimer(text_lines, timeout_sec):
+def DrawFloatingWindowWithTimer(textLines, timeoutSec):
     nvim = pynvim.attach("socket", path="/tmp/nvim")
 
     buf = nvim.api.create_buf(False, True)
-    nvim.api.buf_set_lines(buf, 0, -1, False, text_lines)
+    nvim.api.buf_set_lines(buf, 0, -1, False, textLines)
 
-    width = max(len(line) for line in text_lines) + 2 if text_lines else 10
-    height = len(text_lines) if text_lines else 1
+    width = max(len(line) for line in textLines) + 2 if textLines else 10
+    height = len(textLines) if textLines else 1
 
-    screen_width = nvim.api.get_option("columns")
-    screen_height = nvim.api.get_option("lines")
+    screenWidth = nvim.api.get_option("columns")
+    screenHeight = nvim.api.get_option("lines")
 
-    row = (screen_height - height) // 2
-    col = (screen_width - width) // 2
+    row = (screenHeight - height) // 2
+    col = (screenWidth - width) // 2
     opts = {
         "relative": "editor",
         "width": width,
@@ -56,21 +55,21 @@ def drawFloatingWindowWithTimer(text_lines, timeout_sec):
     endfunction
     """)
 
-    nvim.call("timer_start", int(timeout_sec * 1000), "ClosePopupWrapper")
+    nvim.call("timer_start", int(timeoutSec * 1000), "ClosePopupWrapper")
 
 
-def displayFullscreenTextWithTimer(text_lines, timeout_sec):
+def DisplayFullscreenTextWithTimer(textLines, timeoutSec):
     nvim = pynvim.attach("socket", path="/tmp/nvim")
     buf = nvim.api.create_buf(False, True)
-    nvim.api.buf_set_lines(buf, 0, -1, False, text_lines)
-    width = max(len(line) for line in text_lines) + 2 if text_lines else 10
-    height = len(text_lines) if text_lines else 1
-    screen_width = nvim.api.get_option("columns")
-    screen_height = nvim.api.get_option("lines")
+    nvim.api.buf_set_lines(buf, 0, -1, False, textLines)
+    width = max(len(line) for line in textLines) + 2 if textLines else 10
+    height = len(textLines) if textLines else 1
+    screenWidth = nvim.api.get_option("columns")
+    screenHeight = nvim.api.get_option("lines")
     opts = {
         "relative": "editor",
-        "width": screen_width,
-        "height": screen_height,
+        "width": screenWidth,
+        "height": screenHeight,
         "row": 0,
         "col": 0,
         "style": "minimal",
@@ -100,47 +99,55 @@ def displayFullscreenTextWithTimer(text_lines, timeout_sec):
         call timer_stop(a:timer_id)
     endfunction
     """)
-    nvim.call("timer_start", int(timeout_sec * 1000), "ClosePopupWrapper")
+    nvim.call("timer_start", int(timeoutSec * 1000), "ClosePopupWrapper")
 
 
-def openFileInSingleTab(file_path):
+def OpenFileInSingleTab(filePath):
     nvim = pynvim.attach("socket", path="/tmp/nvim")
 
-    current_tab = nvim.api.get_current_tabpage()
+    currentTab = nvim.api.get_current_tabpage()
     for tab in nvim.api.list_tabpages():
-        if tab != current_tab:
+        if tab != currentTab:
             nvim.api.tabpage_close(tab, True)
 
-    nvim.command(f"edit {file_path}")
+    nvim.command(f"edit {filePath}")
 
-    abs_path = os.path.abspath(file_path)
-    directory = os.path.dirname(abs_path)
+    absPath = os.path.abspath(filePath)
+    directory = os.path.dirname(absPath)
     nvim.command(f"cd {directory}")
 
-    cur_buf = nvim.api.get_current_buf()
+    curBuf = nvim.api.get_current_buf()
     for b in nvim.api.list_bufs():
-        if b != cur_buf:
+        if b != curBuf:
             try:
                 nvim.api.buf_delete(b, {"force": True})
             except Exception:
                 pass
 
     # Set window options to enable line numbers, relative line numbers, and sign column
-    cur_win = nvim.api.get_current_win()
-    nvim.api.win_set_option(cur_win, "number", True)
-    nvim.api.win_set_option(cur_win, "relativenumber", True)
-    nvim.api.win_set_option(cur_win, "signcolumn", "yes")
+    curWin = nvim.api.get_current_win()
+    nvim.api.win_set_option(curWin, "number", True)
+    nvim.api.win_set_option(curWin, "relativenumber", True)
+    nvim.api.win_set_option(curWin, "signcolumn", "yes")
 
 
-def fullscreenCountdownWithText(text, seconds):
+def CloseNvim():
+    nvim = pynvim.attach("socket", path="/tmp/nvim")
+    currentTab = nvim.api.get_current_tabpage()
+    for tab in nvim.api.list_tabpages():
+        if tab != currentTab:
+            nvim.api.tabpage_close(tab, True)
+
+
+def FullscreenCountdownWithText(text, seconds):
     nvim = pynvim.attach("socket", path="/tmp/nvim")
     buf = nvim.api.create_buf(False, True)
-    screen_width = nvim.api.get_option("columns")
-    screen_height = nvim.api.get_option("lines")
+    screenWidth = nvim.api.get_option("columns")
+    screenHeight = nvim.api.get_option("lines")
     opts = {
         "relative": "editor",
-        "width": screen_width,
-        "height": screen_height,
+        "width": screenWidth,
+        "height": screenHeight,
         "row": 0,
         "col": 0,
         "style": "minimal",
@@ -175,9 +182,9 @@ def fullscreenCountdownWithText(text, seconds):
     end
     """)
     for remaining in range(seconds, 0, -1):
-        text_lines = str(text).splitlines()
-        lines_to_set = text_lines + [f"Countdown: {remaining}"]
-        nvim.api.buf_set_lines(buf, 0, -1, False, lines_to_set)
+        textLines = str(text).splitlines()
+        linesToSet = textLines + [f"Countdown: {remaining}"]
+        nvim.api.buf_set_lines(buf, 0, -1, False, linesToSet)
         if nvim.exec_lua("return vim.g.countdown_break"):
             break
         time.sleep(1)
@@ -185,27 +192,27 @@ def fullscreenCountdownWithText(text, seconds):
     return nvim.exec_lua("return vim.g.countdown_break")
 
 
-def displayTextWait(text_lines):
-    if isinstance(text_lines, str):
-        text_lines = text_lines.splitlines() or [text_lines]
-    elif isinstance(text_lines, (list, tuple)):
-        text_lines = [str(line) for line in text_lines]
+def DisplayTextWait(textLines):
+    if isinstance(textLines, str):
+        textLines = textLines.splitlines() or [textLines]
+    elif isinstance(textLines, (list, tuple)):
+        textLines = [str(line) for line in textLines]
     else:
-        raise TypeError("text_lines must be a string or list/tuple of strings")
+        raise TypeError("textLines must be a string or list/tuple of strings")
 
     nvim = pynvim.attach("socket", path="/tmp/nvim")
 
-    current_tab = nvim.api.get_current_tabpage()
-    all_tabs = nvim.api.list_tabpages()
-    for tab in all_tabs:
-        if tab != current_tab:
+    currentTab = nvim.api.get_current_tabpage()
+    allTabs = nvim.api.list_tabpages()
+    for tab in allTabs:
+        if tab != currentTab:
             nvim.api.tabpage_close(tab)
 
     win = nvim.api.get_current_win()
-    prev_buf = nvim.api.get_current_buf()
+    prevBuf = nvim.api.get_current_buf()
 
     buf = nvim.api.create_buf(False, True)
-    nvim.api.buf_set_lines(buf, 0, -1, False, text_lines)
+    nvim.api.buf_set_lines(buf, 0, -1, False, textLines)
 
     nvim.api.buf_set_option(buf, "bufhidden", "hide")
     nvim.api.buf_set_option(buf, "modifiable", False)
@@ -220,7 +227,7 @@ def displayTextWait(text_lines):
 
     nvim.exec_lua("vim.g.user_entered = false")
 
-    lua_code = """
+    luaCode = """
     vim.g.prev_buf = ...
     function CloseMessageBuffer()
       vim.g.user_entered = true
@@ -240,7 +247,7 @@ def displayTextWait(text_lines):
       end
     end
     """
-    nvim.exec_lua(lua_code, prev_buf)
+    nvim.exec_lua(luaCode, prevBuf)
 
     nvim.api.buf_set_keymap(
         buf,
@@ -257,7 +264,7 @@ def displayTextWait(text_lines):
         time.sleep(0.1)
 
 
-def timer_with_reminders_and_popup(seconds):
+def TimerWithRemindersAndPopup(seconds):
     nvim = pynvim.attach("socket", path="/tmp/nvim")
 
     nvim.exec_lua("vim.g.finish_timer = false")
@@ -281,18 +288,18 @@ def timer_with_reminders_and_popup(seconds):
     )
     reminders = [r for r in reminders if 3 < r < seconds]
 
-    def show_popup(lines):
+    def ShowPopup(lines):
         """Create a floating popup with given lines of text."""
         buf = nvim.api.create_buf(False, True)
         nvim.api.buf_set_lines(buf, 0, -1, False, lines)
 
         width = max(len(line) for line in lines) + 4 if lines else 10
         height = len(lines) if lines else 1
-        screen_width = nvim.api.get_option("columns")
-        screen_height = nvim.api.get_option("lines")
+        screenWidth = nvim.api.get_option("columns")
+        screenHeight = nvim.api.get_option("lines")
 
-        row = (screen_height - height) // 2
-        col = (screen_width - width) // 2
+        row = (screenHeight - height) // 2
+        col = (screenWidth - width) // 2
 
         opts = {
             "relative": "editor",
@@ -307,22 +314,22 @@ def timer_with_reminders_and_popup(seconds):
         win = nvim.api.open_win(buf, True, opts)
         return win, buf
 
-    def close_popup(win):
+    def ClosePopup(win):
         """Safely close popup window if valid."""
         if win and nvim.api.win_is_valid(win):
             nvim.api.win_close(win, True)
 
     remaining = seconds
-    last_time = time.time()
-    reminder_index = 0
-    popup_win = None
-    popup_buf = None
-    popup_start_time = None
+    lastTime = time.time()
+    reminderIndex = 0
+    popupWin = None
+    popupBuf = None
+    popupStartTime = None
 
     while remaining > 0:
         now = time.time()
-        elapsed = now - last_time
-        last_time = now
+        elapsed = now - lastTime
+        lastTime = now
         remaining -= elapsed
 
         if remaining <= 0:
@@ -335,55 +342,55 @@ def timer_with_reminders_and_popup(seconds):
             )
             break
 
-        if popup_win and popup_start_time and (now - popup_start_time > 3):
-            close_popup(popup_win)
-            popup_win = None
-            popup_buf = None
-            popup_start_time = None
+        if popupWin and popupStartTime and (now - popupStartTime > 3):
+            ClosePopup(popupWin)
+            popupWin = None
+            popupBuf = None
+            popupStartTime = None
 
-        if reminder_index < len(reminders) and remaining <= reminders[reminder_index]:
-            if popup_win:
-                close_popup(popup_win)
-                popup_win = None
-                popup_buf = None
-                popup_start_time = None
+        if reminderIndex < len(reminders) and remaining <= reminders[reminderIndex]:
+            if popupWin:
+                ClosePopup(popupWin)
+                popupWin = None
+                popupBuf = None
+                popupStartTime = None
 
-            reminder_msg = [
-                f"Reminder: {int(reminders[reminder_index])} seconds remaining!"
+            reminderMsg = [
+                f"Reminder: {int(reminders[reminderIndex])} seconds remaining!"
             ]
-            popup_win, popup_buf = show_popup(reminder_msg)
-            popup_start_time = now
-            reminder_index += 1
+            popupWin, popupBuf = ShowPopup(reminderMsg)
+            popupStartTime = now
+            reminderIndex += 1
 
         elif 15 >= remaining > 3:
-            timer_text = [f"Timer: {int(remaining)} seconds remaining"]
-            if not popup_win:
-                popup_win, popup_buf = show_popup(timer_text)
-                popup_start_time = now
+            timerText = [f"Timer: {int(remaining)} seconds remaining"]
+            if not popupWin:
+                popupWin, popupBuf = ShowPopup(timerText)
+                popupStartTime = now
             else:
-                nvim.api.buf_set_lines(popup_buf, 0, -1, False, timer_text)
-                popup_start_time = now
+                nvim.api.buf_set_lines(popupBuf, 0, -1, False, timerText)
+                popupStartTime = now
 
         elif 3 >= remaining > 0:
-            reminder_msg = [f"*** LAST {int(remaining)} SECONDS ***"]
-            if not popup_win:
-                popup_win, popup_buf = show_popup(reminder_msg)
-                popup_start_time = now
+            reminderMsg = [f"*** LAST {int(remaining)} SECONDS ***"]
+            if not popupWin:
+                popupWin, popupBuf = ShowPopup(reminderMsg)
+                popupStartTime = now
             else:
-                nvim.api.buf_set_lines(popup_buf, 0, -1, False, reminder_msg)
-                popup_start_time = now
+                nvim.api.buf_set_lines(popupBuf, 0, -1, False, reminderMsg)
+                popupStartTime = now
 
         else:
-            if popup_win and not popup_start_time:
-                close_popup(popup_win)
-                popup_win = None
-                popup_buf = None
+            if popupWin and not popupStartTime:
+                ClosePopup(popupWin)
+                popupWin = None
+                popupBuf = None
 
         time.sleep(0.1)
 
-    if popup_win:
-        close_popup(popup_win)
-    save_all_files()
+    if popupWin:
+        ClosePopup(popupWin)
+    SaveAllFiles()
     if remaining > 0 and finish:
         return int(remaining)
     else:
@@ -391,25 +398,25 @@ def timer_with_reminders_and_popup(seconds):
         return 0
 
 
-def save_all_files():
+def SaveAllFiles():
     nvim = pynvim.attach("socket", path="/tmp/nvim")
     nvim.command("wall")
 
 
-def setup_idea_command(title, description):
+def SetupIdeaCommand(title, description):
     nvim = pynvim.attach("socket", path="/tmp/nvim")
 
     # Escape quotes to avoid Lua syntax errors
-    title_escaped = title.replace('"', '\\"')
-    description_escaped = description.replace('"', '\\"')
+    titleEscaped = title.replace('"', '\\"')
+    descriptionEscaped = description.replace('"', '\\"')
 
-    lua_code = f'''
+    luaCode = f'''
     function ShowIdea()
         local buf = vim.api.nvim_create_buf(false, true)  -- scratch buffer
         local lines = {{
-            "{title_escaped}",
+            "{titleEscaped}",
             "",
-            "{description_escaped}"
+            "{descriptionEscaped}"
         }}
         vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
 
@@ -440,11 +447,11 @@ def setup_idea_command(title, description):
     '''
 
     # Define ShowIdea() as Lua
-    nvim.exec_lua(lua_code)
+    nvim.exec_lua(luaCode)
 
     # Define the Vim user command :Idea in Vimscript
     nvim.command("command! Idea lua ShowIdea()")
 
 
 if __name__ == "__main__":
-    setup_idea_command("title", "description")
+    SetupIdeaCommand("title", "description")
