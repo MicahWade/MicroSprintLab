@@ -84,6 +84,7 @@ def setupProject(projectTitle: str, projectDescription: str):
     else:
         import nvimManager
 
+        nvimManager.setup_idea_command(projectTitle, projectDescription)
         nvimManager.openFileInSingleTab(f"{currentProjectPath}/main{language}")
         timeSpent = int(3600 - nvimManager.timer_with_reminders_and_popup(3600))
     gitManager.finishProject(

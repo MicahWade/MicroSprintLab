@@ -115,7 +115,6 @@ def openFileInSingleTab(file_path):
 
     abs_path = os.path.abspath(file_path)
     directory = os.path.dirname(abs_path)
-
     nvim.command(f"cd {directory}")
 
     cur_buf = nvim.api.get_current_buf()
@@ -125,6 +124,12 @@ def openFileInSingleTab(file_path):
                 nvim.api.buf_delete(b, {"force": True})
             except Exception:
                 pass
+
+    # Set window options to enable line numbers, relative line numbers, and sign column
+    cur_win = nvim.api.get_current_win()
+    nvim.api.win_set_option(cur_win, "number", True)
+    nvim.api.win_set_option(cur_win, "relativenumber", True)
+    nvim.api.win_set_option(cur_win, "signcolumn", "yes")
 
 
 def fullscreenCountdownWithText(text, seconds):
@@ -170,9 +175,9 @@ def fullscreenCountdownWithText(text, seconds):
     end
     """)
     for remaining in range(seconds, 0, -1):
-        nvim.api.buf_set_lines(
-            buf, 0, -1, False, [str(text), f"Countdown: {remaining}"]
-        )
+        text_lines = str(text).splitlines()
+        lines_to_set = text_lines + [f"Countdown: {remaining}"]
+        nvim.api.buf_set_lines(buf, 0, -1, False, lines_to_set)
         if nvim.exec_lua("return vim.g.countdown_break"):
             break
         time.sleep(1)
@@ -378,6 +383,7 @@ def timer_with_reminders_and_popup(seconds):
 
     if popup_win:
         close_popup(popup_win)
+    save_all_files()
     if remaining > 0 and finish:
         return int(remaining)
     else:
@@ -390,5 +396,55 @@ def save_all_files():
     nvim.command("wall")
 
 
+def setup_idea_command(title, description):
+    nvim = pynvim.attach("socket", path="/tmp/nvim")
+
+    # Escape quotes to avoid Lua syntax errors
+    title_escaped = title.replace('"', '\\"')
+    description_escaped = description.replace('"', '\\"')
+
+    lua_code = f'''
+    function ShowIdea()
+        local buf = vim.api.nvim_create_buf(false, true)  -- scratch buffer
+        local lines = {{
+            "{title_escaped}",
+            "",
+            "{description_escaped}"
+        }}
+        vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+
+        local width = 0
+        for _, line in ipairs(lines) do
+            if #line > width then
+                width = #line
+            end
+        end
+        local height = #lines
+
+        local opts = {{
+            relative = "editor",
+            width = width + 4,
+            height = height + 2,
+            row = math.floor((vim.o.lines - height) / 2),
+            col = math.floor((vim.o.columns - width) / 2),
+            style = "minimal",
+            border = "rounded",
+        }}
+
+        local win = vim.api.nvim_open_win(buf, true, opts)
+
+        -- Close window on pressing q or <Esc>
+        vim.api.nvim_buf_set_keymap(buf, "n", "q", ":close<CR>", {{nowait=true, noremap=true, silent=true}})
+        vim.api.nvim_buf_set_keymap(buf, "n", "<Esc>", ":close<CR>", {{nowait=true, noremap=true, silent=true}})
+    end
+    '''
+
+    # Define ShowIdea() as Lua
+    nvim.exec_lua(lua_code)
+
+    # Define the Vim user command :Idea in Vimscript
+    nvim.command("command! Idea lua ShowIdea()")
+
+
 if __name__ == "__main__":
-    save_all_files()
+    setup_idea_command("title", "description")
