@@ -1,7 +1,7 @@
 import threading
 
 
-def Tinput(time: int, outOfTime: str):
+def Tinput(time: int):
     def getInput():
         answer = str(input())
 
@@ -10,5 +10,4 @@ def Tinput(time: int, outOfTime: str):
     thread.start()
     thread.join(time)
     if thread.is_alive():
-        print(outOfTime)
         return 0

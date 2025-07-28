@@ -32,9 +32,9 @@ def timer(second: int) -> int:
             reminder(reminders[0])
         print("Remaining time: {:.1f}s".format(remainingTime), end="\r", flush=True)
         if remainingTime > 500:
-            time.sleep(0.5)
+            time.sleep(1)
         else:
-            time.sleep(0.05)
+            time.sleep(0.1)
         if lastTime is not None:
             remainingTime -= time.time() - lastTime
             lastTime = time.time()
