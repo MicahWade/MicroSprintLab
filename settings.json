@@ -1,6 +1,6 @@
 {
   "editor": "nvim",
   "language": ".py",
-  "remote": true,
-  "nvim": true
+  "remote": false,
+  "nvim": false
 }
