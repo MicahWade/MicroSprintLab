@@ -106,13 +106,11 @@ def displayFullscreenTextWithTimer(text_lines, timeout_sec):
 def openFileInSingleTab(file_path):
     nvim = pynvim.attach("socket", path="/tmp/nvim")
 
-    # Close all other tabs except current
     current_tab = nvim.api.get_current_tabpage()
     for tab in nvim.api.list_tabpages():
         if tab != current_tab:
-            nvim.api.tabpage_close(tab, True)  # force close other tabs
+            nvim.api.tabpage_close(tab, True)
 
-    # Open the file in the current window
     nvim.command(f"edit {file_path}")
 
     abs_path = os.path.abspath(file_path)
@@ -120,7 +118,6 @@ def openFileInSingleTab(file_path):
 
     nvim.command(f"cd {directory}")
 
-    # Close all other buffers except the newly opened one
     cur_buf = nvim.api.get_current_buf()
     for b in nvim.api.list_bufs():
         if b != cur_buf:
@@ -216,7 +213,6 @@ def displayTextWait(text_lines):
     nvim.api.win_set_option(win, "signcolumn", "no")
     nvim.api.buf_clear_namespace(buf, 0, 0, -1)
 
-    # Initialize the indicator variable in Vim globals
     nvim.exec_lua("vim.g.user_entered = false")
 
     lua_code = """
@@ -249,7 +245,6 @@ def displayTextWait(text_lines):
         {"nowait": True, "noremap": True, "silent": True},
     )
 
-    # Poll the variable until the user presses Enter
     while True:
         entered = nvim.exec_lua("return vim.g.user_entered")
         if entered:
@@ -260,14 +255,10 @@ def displayTextWait(text_lines):
 def timer_with_reminders_and_popup(seconds):
     nvim = pynvim.attach("socket", path="/tmp/nvim")
 
-    # Initialize the finish flag in Neovim's global variable space
     nvim.exec_lua("vim.g.finish_timer = false")
 
-    # Define the user command to allow finishing the timer early from inside Neovim
-    # Must start with uppercase letter to avoid E183 error
     nvim.command("command! Finish lua vim.g.finish_timer = true")
 
-    # Reminder times (seconds)
     reminders = sorted(
         set(
             [
@@ -283,7 +274,6 @@ def timer_with_reminders_and_popup(seconds):
         ),
         reverse=True,
     )
-    # Filter reminders to only those within the timer duration and greater than 3 seconds
     reminders = [r for r in reminders if 3 < r < seconds]
 
     def show_popup(lines):
@@ -333,7 +323,6 @@ def timer_with_reminders_and_popup(seconds):
         if remaining <= 0:
             break
 
-        # Poll Neovim global variable for early finish command
         finish = nvim.exec_lua("return vim.g.finish_timer")
         if finish:
             print(
@@ -341,7 +330,6 @@ def timer_with_reminders_and_popup(seconds):
             )
             break
 
-        # Close popup if displayed longer than 3 seconds
         if popup_win and popup_start_time and (now - popup_start_time > 3):
             close_popup(popup_win)
             popup_win = None
@@ -349,7 +337,6 @@ def timer_with_reminders_and_popup(seconds):
             popup_start_time = None
 
         if reminder_index < len(reminders) and remaining <= reminders[reminder_index]:
-            # Close any existing popup before showing new reminder
             if popup_win:
                 close_popup(popup_win)
                 popup_win = None
@@ -370,7 +357,6 @@ def timer_with_reminders_and_popup(seconds):
                 popup_start_time = now
             else:
                 nvim.api.buf_set_lines(popup_buf, 0, -1, False, timer_text)
-                # Reset popup start time to keep it visible during countdown
                 popup_start_time = now
 
         elif 3 >= remaining > 0:
@@ -383,7 +369,6 @@ def timer_with_reminders_and_popup(seconds):
                 popup_start_time = now
 
         else:
-            # No popup needed, close if exists and no active start time
             if popup_win and not popup_start_time:
                 close_popup(popup_win)
                 popup_win = None
@@ -391,10 +376,8 @@ def timer_with_reminders_and_popup(seconds):
 
         time.sleep(0.1)
 
-    # Cleanup popup window on exit
     if popup_win:
         close_popup(popup_win)
-
     if remaining > 0 and finish:
         return int(remaining)
     else:
@@ -402,6 +385,10 @@ def timer_with_reminders_and_popup(seconds):
         return 0
 
 
+def save_all_files():
+    nvim = pynvim.attach("socket", path="/tmp/nvim")
+    nvim.command("wall")
+
+
 if __name__ == "__main__":
-    # Run timer for 20 seconds, user can type ":finish<Enter>" in Neovim to stop early
-    timer_with_reminders_and_popup(20)
+    save_all_files()
