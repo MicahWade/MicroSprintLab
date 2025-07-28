@@ -18,8 +18,8 @@ python3 main.py
 
 ### Neovim Integration  
 ```bash
-git clone  ~/documents
-wget  ~/.config/nvim/lua/microsprintlab.lua
+git clone https://github.com/MicahWade/MicroSprintLab.git ~/Documents/
+cp ~/Documents/MicroSprintLab/microsprintlab.lua ~/.config/nvim/lua/microsprintlab.lua
 # Add to init.lua:
 require("microsprintlab").setup()
 
