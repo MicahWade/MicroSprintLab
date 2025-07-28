@@ -8,8 +8,21 @@ This project targets coders at all levels who want to efficiently build and prac
 
 ### Command Line Version  
 ```bash
-git clone  ~/documents
-cd ~/documents
+git clone https://github.com/MicahWade/MicroSprintLab.git ~/Documents/
+cd ~/documents/MicroSprintLab/
+python -m venv venv
+```
+On Windows:
+```bash
+venv\Scripts\activate
+```
+On Linux/Mac:
+```bash
+source venv/bin/activate
+```
+
+```bash
+pip install -r requirements.txt
 python3 main.py
 ```
 
