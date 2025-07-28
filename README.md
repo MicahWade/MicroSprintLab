@@ -24,6 +24,7 @@ source venv/bin/activate
 ```bash
 pip install -r requirements.txt
 ```
+Change editor to your editor in setting.json
 To Start Run
 ```bash
 python3 main.py
@@ -31,6 +32,8 @@ python3 main.py
 
 ### For Neovim Integration  
 Start with Command line Version
+
+Change nvim to true in setting.json
 ```bash
 cp ~/Documents/MicroSprintLab/microsprintlab.lua ~/.config/nvim/lua/microsprintlab.lua
 # Add to init.lua:
