@@ -22,8 +22,13 @@ def DisplayText(text: str):
 def inputDisplay(text: str) -> str:
     global nvimManager
     if nvimManager and nvim:
-        nvimManager.DisplayTextWait(text)
-        return "\n".join(nvimManager.WaitForUserDoneInputAndEnter())
+        return "\n".join(
+            nvimManager.FloatingInputPrompt(
+                [
+                    text,
+                ]
+            )
+        )
     else:
         print(text)
         return input()

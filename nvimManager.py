@@ -131,38 +131,6 @@ def OpenFileInSingleTab(filePath):
     nvim.api.win_set_option(curWin, "signcolumn", "yes")
 
 
-def WaitForUserDoneInputAndEnter():
-    nvim = pynvim.attach("socket", path="/tmp/nvim")
-
-    # Shared variable/state in Neovim to detect Enter pressed after leaving Insert mode
-    nvim.exec_lua("""
-        vim.g.user_done_enter = false
-        vim.api.nvim_create_autocmd("InsertLeave", {
-            callback = function()
-                vim.g.user_done_enter = false
-            end
-        })
-        vim.api.nvim_buf_set_keymap(0, "n", "<CR>", "", {
-            noremap = True,
-            silent = True,
-            callback = function()
-                vim.g.user_done_enter = true
-            end
-        })
-    """)
-
-    # Wait loop until user leaves Insert and presses Enter
-    while True:
-        done = nvim.eval("vim.g.user_done_enter")
-        if done:
-            break
-        time.sleep(0.1)
-
-    buf = nvim.current.buffer
-    lines = buf[:]
-    return lines
-
-
 def CloseNvim():
     nvim = pynvim.attach("socket", path="/tmp/nvim")
     currentTab = nvim.api.get_current_tabpage()
@@ -178,8 +146,8 @@ def FullscreenCountdownWithText(text, seconds):
     screenHeight = nvim.api.get_option("lines")
     opts = {
         "relative": "editor",
-        "width": screenWidth,
         "height": screenHeight,
+        "width": screenWidth,
         "row": 0,
         "col": 0,
         "style": "minimal",
@@ -485,5 +453,76 @@ def SetupIdeaCommand(title, description):
     nvim.command("command! Idea lua ShowIdea()")
 
 
+def FloatingInputPrompt(prompt_text_lines, height=5, width=50):
+    nvim = pynvim.attach("socket", path="/tmp/nvim")
+
+    # Create a scratch buffer for input (listed=False, scratch=True)
+    buf = nvim.api.create_buf(False, True)
+
+    # Compose initial lines: prompt + empty input lines
+    # For example, prompt lines first, then one empty line for input
+    lines = prompt_text_lines + [""] * (height - len(prompt_text_lines))
+    nvim.api.buf_set_lines(buf, 0, -1, False, lines)
+
+    # Calculate window position centered on screen
+    screen_width = nvim.api.get_option("columns")
+    screen_height = nvim.api.get_option("lines")
+    row = (screen_height - height) // 2
+    col = (screen_width - width) // 2
+
+    opts = {
+        "relative": "editor",
+        "width": width,
+        "height": height,
+        "row": row,
+        "col": col,
+        "style": "minimal",
+        "border": "rounded",
+    }
+
+    # Open floating window with the buffer, make it focused for user input
+    win = nvim.api.open_win(buf, True, opts)
+
+    # Set buffer options to allow insert mode (modifiable, not readonly)
+    nvim.api.buf_set_option(buf, "modifiable", True)
+    nvim.api.buf_set_option(buf, "bufhidden", "wipe")
+
+    # Put cursor on the first empty line (after prompt)
+    nvim.api.win_set_cursor(win, (len(prompt_text_lines) + 1, 0))
+
+    # Define keymap to confirm input with <CR> (Enter)
+    # It will set a global var to signal done and exit insert mode
+    nvim.api.buf_set_keymap(
+        buf,
+        "i",
+        "<CR>",
+        "<Esc>:lua vim.g.input_done = true<CR>",
+        {"nowait": True, "noremap": True, "silent": True},
+    )
+
+    # Initialize flag for input done
+    nvim.exec_lua("vim.g.input_done = false")
+
+    # Enter insert mode so user can type immediately
+    nvim.command("startinsert")
+
+    # Wait loop until user confirms (presses Enter)
+    while not nvim.exec_lua("return vim.g.input_done"):
+        time.sleep(0.1)
+
+    # Get buffer lines as user input (skip prompt lines)
+    input_lines = nvim.api.buf_get_lines(buf, len(prompt_text_lines), -1, False)
+
+    # Close floating window
+    nvim.api.win_close(win, True)
+
+    # Return entered input as list of lines or join as single string if you prefer
+    return input_lines
+
+
+# Example usage:
 if __name__ == "__main__":
-    SetupIdeaCommand("title", "description")
+    prompt = ["Please enter your text below and press Enter when done:"]
+    user_input = FloatingInputPrompt(prompt)
+    print("User entered:")
+    print("\n".join(user_input))
