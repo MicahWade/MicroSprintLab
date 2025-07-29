@@ -78,6 +78,16 @@ python3 main.py
    :MicroSprintLab
    ```
 
+## TODO
+
+- [ ] Add language boilerplate template for new files.
+- [ ] Implement different modes for timed projects, e.g.:
+  - 2-hour sessions
+  - 30-minute sprints
+  - Feature implementation on someone else's project within a set time
+- [ ] Support additional editors besides Neovim.
+- [ ] Add more ideas and enhancements.
+
 ## 🤝 Contributing
 
 - Some parts of the codebase are AI-generated.
