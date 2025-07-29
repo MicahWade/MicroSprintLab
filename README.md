@@ -78,6 +78,12 @@ python3 main.py
    :MicroSprintLab
    ```
 
+## MicroSprintLab Wiki
+
+- [Settings](settings) — Details about configuration settings available.
+- [Customization Guide](Customization-Guide) — Learn how to adjust non-core settings.
+- [Ideas](Ideas) — How to Add Ideas.
+
 ## TODO
 
 - [ ] Add language boilerplate template for new files.
